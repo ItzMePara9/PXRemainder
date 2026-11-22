@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">PXReminder</string>
+    <string name="app_tagline">Precision offline alarms &amp; reminders</string>
+    <string name="developer_credit">Developed by ItzMePara9</string>
+    <string name="developer_github">https://github.com/ItzMePara9</string>
+    <string name="license_name">MIT License</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_calendar">Calendar</string>
+    <string name="nav_history">History</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Dashboard -->
+    <string name="search_reminders_hint">Search reminders, notes, categories…</string>
+    <string name="filter_all">All</string>
+    <string name="filter_today">Today</string>
+    <string name="filter_upcoming">Upcoming</string>
+    <string name="filter_completed">Completed</string>
+    <string name="section_next_up">NEXT UP</string>
+    <string name="section_today">TODAY</string>
+    <string name="section_upcoming">UPCOMING</string>
+    <string name="section_completed">COMPLETED</string>
+    <string name="create_reminder">New Reminder</string>
+    <string name="edit_reminder">Edit Reminder</string>
+    <string name="empty_reminders_title">All clear</string>
+    <string name="empty_reminders_subtitle">Schedule an alarm-grade reminder to stay on track.</string>
+
+    <!-- Alarm Ringing -->
+    <string name="alarm_ringing_label">ALARM ACTIVE</string>
+    <string name="alarm_snooze">SNOOZE</string>
+    <string name="alarm_dismiss">DISMISS</string>
+    <string name="alarm_notification_channel_name">PXReminder Alarms</string>
+    <string name="alarm_notification_channel_desc">High-priority full-screen alarm alerts with sound and vibration</string>
+
+    <!-- Widget -->
+    <string name="widget_description">Shows your next upcoming PXReminder alarm and quick create shortcut.</string>
+    <string name="widget_no_upcoming">No upcoming reminders</string>
+    <string name="widget_tap_to_create">Tap + to schedule an alarm</string>
+    <string name="widget_next_label">NEXT ALARM</string>
+
+    <!-- Permissions -->
+    <string name="perm_exact_alarm_title">Exact Alarm Access Needed</string>
+    <string name="perm_exact_alarm_desc">Grant exact alarm permission so reminders fire on the exact second, even in Doze mode. Without it, Android runs reminders in approximate fallback mode.</string>
+    <string name="perm_fullscreen_title">Full-Screen Alarm Display</string>
+    <string name="perm_fullscreen_desc">Allow full-screen intents so PXReminder can wake your screen with the alarm interface. Without it, a high-priority notification with Snooze &amp; Dismiss actions is shown instead.</string>
+    <string name="perm_notifications_title">Notification Permission Required</string>
+    <string name="perm_notifications_desc">Notifications are required for alarm alerts, Snooze/Dismiss controls, and foreground playback.</string>
+    <string name="action_grant">Grant Access</string>
+    <string name="action_open_settings">Open Settings</string>
+</resources>

@@ -1,0 +1,6 @@
+{
+  "name": "PXReminder",
+  "description": "Offline-first native Android alarm and reminder application with full-screen ringing experience, recurring schedules, custom ringtones, calendar view, home widget, and local JSON backup.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
