@@ -70,43 +70,13 @@ Everything works locally — no accounts, no servers, no cloud services.
 ## 📥 Download & Install
 
 **Download the latest APK from GitHub Releases.**
+> ![Download](https://github.com/ItzMePara9/PXRemainder/releases/tag/v1.0.0)
 
 1. Download the latest `.apk` file.
 2. Open the downloaded APK on your Android device.
 3. Allow **Install unknown apps** if Android asks.
 4. Tap **Install**.
 5. Open PXReminder and grant the required alarm and notification permissions.
-
-## 💻 Build From Source
-
-```bash
-git clone https://github.com/ItzMePara9/PXRemainder.git
-cd PXRemainder
-```
-
-Build a debug APK installable on physical Android devices:
-
-```bash
-./gradlew assembleDebug
-```
-
-Expected APK output:
-
-```text
-app/build/outputs/apk/debug/app-debug.apk
-```
-
-Build a release APK (with release signing credentials configured):
-
-```bash
-./gradlew assembleRelease
-```
-
-Run local JVM & Robolectric unit tests:
-
-```bash
-./gradlew :app:testDebugUnitTest
-```
 
 ## ⚠️ Android & Manufacturer Limitations
 
