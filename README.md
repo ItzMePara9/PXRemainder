@@ -1,4 +1,4 @@
- <div align="center">
+<div align="center">
 
 # ⏰ PXReminder
 
@@ -26,24 +26,22 @@ A modern offline-first Android reminder app with persistent alarms, customizable
 
 ## 📖 Overview
 
-**PXReminder** is a native Android reminder application designed to help you never miss important tasks.
+**PXReminder** is a native, offline-first Android alarm and reminder application built with **Kotlin**, **Jetpack Compose**, **Material 3**, and **Room**. Reminders are scheduled as real Android alarms powered by `AlarmManager` and a dedicated foreground service (`AlarmService`) so they continue ringing independently of UI lifecycles until snoozed or dismissed.
 
-Schedule reminders, receive full-screen alarm alerts, customize ringtones, and snooze or dismiss alarms whenever needed.
-
-Everything works locally without accounts, servers, or cloud services.
+Everything works locally — no accounts, no servers, no cloud services.
 
 ## ✨ Features
 
-- ⏰ **Smart Reminders** – Create, edit and manage reminders.
-- 🔔 **Persistent Alarms** – Continuous ringing until dismissed or snoozed.
-- 📱 **Full-Screen Alerts** – Alarm-style interface.
-- 🎵 **Custom Ringtones** – Choose your own alarm sounds.
-- 🔁 **Recurring Reminders** – Daily, weekly, monthly and custom schedules.
-- 📅 **Calendar** – Manage reminders through a calendar.
-- 🗂️ **Categories** – Personal, Study, Work, Health and more.
-- 🌙 **Themes** – Dark, light and system themes.
-- 💾 **Backup & Restore** – Export and import reminder data.
-- 🔒 **Privacy First** – Offline-first and locally stored data.
+- ⏰ **True Alarm-Grade Scheduling** — Uses `AlarmManager.setAlarmClock()` when exact alarm permission is granted, with explicit `setAndAllowWhileIdle()` fallback and a clear **Approximate Mode** warning in the UI.
+- 🔔 **Full-Screen Ringing Experience** — Dedicated `AlarmRingingActivity` with lock-screen display (`showWhenLocked`, `turnScreenOn`), live digital clock, multi-alarm queue handling, multiple snooze intervals (`5m`, `10m`, `15m`, `30m`), and dismiss actions.
+- 📱 **Foreground Playback Service** — `AlarmService` (`foregroundServiceType="mediaPlayback"`) runs independently of the Activity lifecycle, loops audio via `AudioAttributes.USAGE_ALARM`, manages audio focus, supports gradual volume ramp, and drives continuous waveform vibration.
+- 🎵 **Built-in & Custom Ringtones** — 5 bundled PCM WAV alarm tones (`Classic Alarm`, `Digital Pulse`, `Gentle Morning`, `Sharp Beep`, `Rising Tone`) plus zero-permission Storage Access Framework (`OpenDocument`) custom audio selection and system alarm tone picking with live preview.
+- 🔁 **Multi-Schedule & Recurring Alarms** — `Never`, `Every day`, `Every weekday`, `Every week`, `Every month` (with month-end clamping), and `Custom days`, plus multiple scheduled date/time slots per reminder.
+- 📅 **Calendar, History & Categories** — Monthly calendar with recurring event projection, completed reminder archive, alarm event log, and customizable category icons & colors.
+- 🧩 **Home Screen Widget** — `PXReminderWidgetProvider` showing the next upcoming alarm and a quick-create shortcut.
+- 💾 **Local JSON Backup & Restore** — Portable offline backup and validated restore for reminders, categories, and DataStore preferences.
+- 🌙 **Dark-First & Light Themes** — Obsidian dark-first design inspired by Linear, Raycast, and Nothing OS, alongside a full light theme and system theme option.
+- 🔒 **Privacy First** — All data stays on the device.
 
 ## 🛠️ Technology Stack
 
@@ -57,18 +55,21 @@ Everything works locally without accounts, servers, or cloud services.
 | Foreground Service | Continuous alarm playback |
 | DataStore | Preferences |
 | Navigation Compose | Navigation |
+| Moshi | JSON backup & restore |
+
+## 🏗️ Architecture
+
+- `data/` — Room entities (`ReminderEntity`, `CategoryEntity`, `AlarmHistoryEntity`), DAOs, `PXReminderDatabase` (with explicit `MIGRATION_1_2`), `ReminderRepository`, and `PreferencesRepository` (DataStore).
+- `domain/` — Domain models, `RecurrenceCalculator` (DST-safe recurrence & calendar projection), and `TimeFormatters`.
+- `alarm/` — `AlarmScheduler`, `AlarmReceiver`, `AlarmService`, `BootReceiver`, `AlarmNotificationManager`, `AlarmStateHolder`, and `AlarmRingingActivity`.
+- `audio/` — `SoundCatalog` and `AlarmAudioManager`.
+- `ui/` — Jetpack Compose screens (`dashboard`, `create`, `calendar`, `history`, `settings`, `ringing`), adaptive navigation (`PXReminderAppShell`), and theme system.
+- `widget/` — `PXReminderWidgetProvider` and `WidgetUpdater`.
+- `utils/` — `PermissionHelper`, `BackupManager` (Moshi JSON), and `CategoryIconCatalog`.
 
 ## 📥 Download & Install
 
-<badge color="success">Recommended</badge> **Download the latest APK from GitHub Releases.**
-
-### 01. Download APK
-
-Visit the releases page:
-
-**[Download PXReminder for Android](https://github.com/ItzMePara9/PXReminder/releases/latest)**
-
-### 02. Install APK
+**Download the latest APK from GitHub Releases.**
 
 1. Download the latest `.apk` file.
 2. Open the downloaded APK on your Android device.
@@ -76,43 +77,56 @@ Visit the releases page:
 4. Tap **Install**.
 5. Open PXReminder and grant the required alarm and notification permissions.
 
-### 03. Start Using
-
-Create your first reminder, select a date and time, and save it.
-
-Your reminder is ready!
-
 ## 💻 Build From Source
 
 ```bash
-git clone https://github.com/ItzMePara9/PXReminder.git
-cd PXReminder
+git clone https://github.com/ItzMePara9/PXRemainder.git
+cd PXRemainder
 ```
 
-Build the debug APK:
+Build a debug APK installable on physical Android devices:
 
 ```bash
 ./gradlew assembleDebug
 ```
 
-APK location:
+Expected APK output:
 
 ```text
 app/build/outputs/apk/debug/app-debug.apk
 ```
 
+Build a release APK (with release signing credentials configured):
+
+```bash
+./gradlew assembleRelease
+```
+
+Run local JVM & Robolectric unit tests:
+
+```bash
+./gradlew :app:testDebugUnitTest
+```
+
+## ⚠️ Android & Manufacturer Limitations
+
+1. **Exact Alarms (Android 12+ / API 31+):** `SCHEDULE_EXACT_ALARM` may require user approval in **Settings → Apps → Special app access → Alarms & reminders**. When revoked, Android restricts `setAlarmClock()`; PXReminder transparently displays an **Approximate Mode** warning and schedules with `setAndAllowWhileIdle()`.
+2. **Full-Screen Intents (Android 14+ / API 34+):** `USE_FULL_SCREEN_INTENT` can be toggled by the user in system settings. When denied, Android delivers a high-priority ongoing alarm notification with **Snooze** and **Dismiss** actions instead of automatically launching `AlarmRingingActivity`.
+3. **OEM Battery Optimizations:** Some manufacturers (e.g., Xiaomi MIUI/HyperOS, Samsung One UI sleeping apps, Oppo ColorOS, Vivo FuntouchOS) aggressively restrict background services or auto-start after reboot. Whitelisting PXReminder from battery optimization ensures reliable `BOOT_COMPLETED` restoration and on-time wakeups.
+4. **Device Reboot & Timezone Changes:** `BootReceiver` listens for `BOOT_COMPLETED`, `TIMEZONE_CHANGED`, `TIME_SET`, `DATE_CHANGED`, `MY_PACKAGE_REPLACED`, and `SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED` to reconstruct and reschedule all active alarms stored in Room.
+
 ## 🗺️ Roadmap
 
 - [x] Project concept and architecture.
-- [ ] Reminder management.
-- [ ] Alarm scheduling engine.
-- [ ] Full-screen alarm interface.
-- [ ] Custom ringtone support.
-- [ ] Calendar integration.
-- [ ] Recurring reminders.
-- [ ] Backup and restore.
-- [ ] Android home-screen widget.
-- [ ] Release APK.
+- [x] Reminder management.
+- [x] Alarm scheduling engine.
+- [x] Full-screen alarm interface.
+- [x] Custom ringtone support.
+- [x] Calendar integration.
+- [x] Recurring reminders.
+- [x] Backup and restore.
+- [x] Android home-screen widget.
+- [ ] Release APK published to GitHub Releases.
 
 ## 🤝 Contributing
 
@@ -127,7 +141,7 @@ Contributions and suggestions are welcome!
 
 PXReminder is licensed under the **MIT License**.
 
-Copyright © 2026 ItzMePara9.
+Copyright © 2026 **ItzMePara9**.
 
 See [LICENSE](LICENSE) for details.
 
